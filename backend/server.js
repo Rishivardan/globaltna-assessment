@@ -2,7 +2,13 @@ const express = require("express");
 const cors = require("cors");
 require("dotenv").config();
 
+
 const connectDB = require("./config/db");
+const jobRoutes = require("./routes/jobRoutes");
+const {
+  notFound,
+  errorHandler,
+} = require("./middleware/errorMiddleware");
 
 const app = express();
 
@@ -17,6 +23,13 @@ app.use(express.json());
 app.get("/", (req, res) => {
   res.json({ message: "API is running successfully" });
 });
+
+// Routes
+app.use("/api/jobs", jobRoutes);
+
+// Error handling
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
