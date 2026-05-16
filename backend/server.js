@@ -16,7 +16,12 @@ const app = express();
 connectDB();
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: [
+    "http://localhost:3000",
+    "https://globaltna-assessment-zeta.vercel.app",
+  ],
+}));
 app.use(express.json());
 
 // Test Route
