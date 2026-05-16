@@ -1,7 +1,7 @@
 import Link from "next/link";
 import StatPill from "./StatPill";
 
-export default function Hero() {
+export default function Hero({ openCount = 0, categoryCount = 0, closedCount = 0 }) {
   return (
     <section className="bg-hero bg-grid text-white">
       <div className="mx-auto flex w-full max-w-6xl flex-col gap-10 px-6 py-20">
@@ -34,13 +34,26 @@ export default function Hero() {
             </div>
           </div>
           <div className="flex flex-col gap-4 rounded-3xl border border-white/10 bg-white/5 p-6 backdrop-blur">
-            <div className="text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
+            <div className="flex items-center gap-3 text-sm font-semibold uppercase tracking-[0.2em] text-white/70">
+              <span className="h-2 w-2 rounded-full bg-emerald-400 shadow-[0_0_12px_rgba(52,211,153,0.9)] animate-blink-soft" />
               Live overview
             </div>
             <div className="flex flex-col gap-4">
-              <StatPill label="Open jobs" value="54" />
-              <StatPill label="Trades categories" value="8" />
-              <StatPill label="Same-day responses" value="92%" />
+              <StatPill
+                label="Open requests"
+                value={openCount}
+                valueClassName="text-emerald-300 animate-pulse"
+              />
+              <StatPill
+                label="Categories"
+                value={categoryCount}
+                valueClassName="text-sky-300 animate-pulse"
+              />
+              <StatPill
+                label="Closed requests"
+                value={closedCount}
+                valueClassName="text-amber-200 animate-pulse"
+              />
             </div>
             <div className="rounded-2xl border border-white/10 bg-white/10 px-4 py-3 text-xs text-white/70">
               Update statuses in one click and keep homeowners informed.

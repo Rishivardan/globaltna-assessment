@@ -18,6 +18,7 @@ const categories = [
 
 export default function Home() {
   const [jobs, setJobs] = useState([]);
+  const [statsJobs, setStatsJobs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [category, setCategory] = useState("All");
@@ -51,10 +52,36 @@ export default function Home() {
     };
   }, [params]);
 
+  useEffect(() => {
+    let isMounted = true;
+
+    fetchJobs({})
+      .then((data) => {
+        if (isMounted) setStatsJobs(data);
+      })
+      .catch(() => {
+        if (isMounted) setStatsJobs([]);
+      });
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const openCount = statsJobs.filter((job) => job.status === "Open").length;
+  const closedCount = statsJobs.filter((job) => job.status === "Closed").length;
+  const categoryCount = new Set(
+    statsJobs.map((job) => job.category).filter(Boolean)
+  ).size;
+
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <Hero />
+      <Hero
+        openCount={openCount}
+        closedCount={closedCount}
+        categoryCount={categoryCount}
+      />
 
       <section className="bg-slate-950 px-6 py-12">
         <div className="mx-auto flex w-full max-w-6xl flex-col gap-8">
@@ -69,12 +96,12 @@ export default function Home() {
               {Array.from({ length: 4 }).map((_, index) => (
                 <div
                   key={`skeleton-${index}`}
-                  className="h-52 rounded-2xl border border-slate-200 bg-white/70 p-6"
+                  className="h-52 rounded-2xl border border-slate-800 bg-slate-900 p-6"
                 >
-                  <div className="h-4 w-24 animate-pulse rounded-full bg-slate-200" />
-                  <div className="mt-4 h-6 w-3/4 animate-pulse rounded-full bg-slate-200" />
-                  <div className="mt-3 h-4 w-full animate-pulse rounded-full bg-slate-200" />
-                  <div className="mt-6 h-10 w-32 animate-pulse rounded-full bg-slate-200" />
+                  <div className="h-4 w-24 animate-pulse rounded-full bg-slate-700" />
+                  <div className="mt-4 h-6 w-3/4 animate-pulse rounded-full bg-slate-700" />
+                  <div className="mt-3 h-4 w-full animate-pulse rounded-full bg-slate-700" />
+                  <div className="mt-6 h-10 w-32 animate-pulse rounded-full bg-slate-700" />
                 </div>
               ))}
             </div>
